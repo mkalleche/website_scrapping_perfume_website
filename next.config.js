@@ -16,14 +16,24 @@ const nextConfig = {
   compress: true,
   // Configure image domains for Supabase storage
   images: {
-    domains: ['mopmajhpeeahpqumpqax.supabase.co'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'mopmajhpeeahpqumpqax.supabase.co',
+        hostname: '**.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
       },
+      // Support for any Supabase project
+      ...(process.env.NEXT_PUBLIC_SUPABASE_URL
+        ? [
+            {
+              protocol: 'https',
+              hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
+              port: '',
+              pathname: '/storage/v1/object/public/**',
+            },
+          ]
+        : []),
     ],
   },
   // Add security headers

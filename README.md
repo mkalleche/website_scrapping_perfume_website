@@ -1,3 +1,5 @@
+# website_scrapping_perfume_website
+
 # Project X - B2B Wholesale Perfume Platform
 
 A comprehensive B2B wholesale platform for perfumes with customer-specific pricing, approval workflows, and advanced inventory management.
