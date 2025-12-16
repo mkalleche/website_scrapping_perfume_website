@@ -125,3 +125,10 @@ jspm_packages/
 
 .vercel
 .env*.local
+
+# Large database dump files
+*.sql
+*.backup
+db_cluster_*.backup
+database_dump*.sql
+init.sql
