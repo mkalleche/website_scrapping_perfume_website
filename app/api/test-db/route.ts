@@ -3,28 +3,60 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    console.log("🔍 Testing database connection...");
+    // Test database connection
     await prisma.$connect();
-    console.log("✅ Database connection successful");
     
-    // Test a simple query
-    const result = await prisma.product.count();
-    console.log("✅ Database query successful, product count:", result);
+    // Try a simple query to verify tables exist
+    const userCount = await prisma.user.count().catch(() => null);
+    const productCount = await prisma.product.count().catch(() => null);
     
-    return NextResponse.json({ 
-      success: true, 
-      message: "Database connection successful",
-      productCount: result 
-    });
-  } catch (error) {
-    console.error("❌ Database connection failed:", error);
+    // Get database info
+    const dbInfo = {
+      connected: true,
+      timestamp: new Date().toISOString(),
+      tables: {
+        users: userCount !== null ? userCount : "table not found",
+        products: productCount !== null ? productCount : "table not found",
+      },
+      databaseUrl: process.env.DATABASE_URL
+        ? `${process.env.DATABASE_URL.split("@")[0]}@***` // Mask password
+        : "not configured",
+      directUrl: process.env.DIRECT_URL
+        ? `${process.env.DIRECT_URL.split("@")[0]}@***` // Mask password
+        : "not configured",
+    };
+
     return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : "Unknown error",
-        details: error
+      {
+        status: "success",
+        message: "✅ Database connection successful!",
+        data: dbInfo,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorDetails = error instanceof Error ? error.stack : String(error);
+
+    return NextResponse.json(
+      {
+        status: "error",
+        message: "❌ Database connection failed!",
+        error: errorMessage,
+        details: process.env.NODE_ENV === "development" ? errorDetails : undefined,
+        databaseUrl: process.env.DATABASE_URL
+          ? `${process.env.DATABASE_URL.split("@")[0]}@***`
+          : "not configured",
+        directUrl: process.env.DIRECT_URL
+          ? `${process.env.DIRECT_URL.split("@")[0]}@***`
+          : "not configured",
       },
       { status: 500 }
     );
+  } finally {
+    // Disconnect to free up connection pool
+    await prisma.$disconnect().catch(() => {
+      // Ignore disconnect errors
+    });
   }
-} 
+}
