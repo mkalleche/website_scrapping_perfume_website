@@ -31,7 +31,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
 
 # vercel
 .vercel
@@ -42,7 +41,6 @@ next-env.d.ts
 
 # prisma
 /prisma/migrations/
-.env
 !.env.local
 .env.development.local
 .env.test.local
@@ -125,3 +123,14 @@ jspm_packages/
 
 .vercel
 .env*.local
+
+# Large database dump files
+*.sql
+*.backup
+db_cluster_*.backup
+database_dump*.sql
+init.sql
+temp_auto_push.bat
+temp_interactive_push.bat
+config.bat
+branch_structure.json
