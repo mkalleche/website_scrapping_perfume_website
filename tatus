@@ -28,3 +28,21 @@ Date:   Fri Aug 22 01:13:31 2025 +0500
 lib/scraping/scrapers/BaseScraper.ts
 package.json
 vercel.json
+
+
+
+
+
+Perum123@!@##
+
+
+
+
+
+pg_restore ^
+  --no-owner ^
+  --no-privileges ^
+  --clean ^
+  --if-exists ^
+  --dbname="postgresql://postgres.otwwbtndkwkzgjqozcfn:Perum123@!@##@aws-1-ap-south-1.pooler.supabase.com:5432/postgres" ^
+  db_cluster.backup
